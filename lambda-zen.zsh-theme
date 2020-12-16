@@ -10,13 +10,6 @@ else
     local USERCOLOR="yellow"
 fi
 
-# check if current dir is a Git repo
-if which git > /dev/null && git rev-parse --git-dir > /dev/null 2>&1; then
-    local IS_GIT_REPO=true
-else
-    local IS_GIT_REPO=false
-fi
-
 
 function is_clean() {
     local STATUS=''
@@ -82,7 +75,7 @@ function git_prompt_info() {
 # return anything in this case. So wrap it in another function and check
 # for an empty string.
 function check_git_prompt_info() {
-    if [[ $IS_GIT_REPO = true ]] ; then
+    if which git > /dev/null && git rev-parse --git-dir > /dev/null 2>&1; then
         echo -e "$(git_prompt_info) $(git_prompt_status)\n$END"
     else
         echo "$END"
@@ -90,7 +83,7 @@ function check_git_prompt_info() {
 }
 
 function get_right_prompt() {
-    if [[ $IS_GIT_REPO = true ]] ; then
+    if which git > /dev/null && git rev-parse --git-dir > /dev/null 2>&1; then
         echo -n "$(git_prompt_short_sha)%{$reset_color%}"
     else
         echo -n "%{$reset_color%}"

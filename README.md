@@ -10,6 +10,25 @@ This theme improves the display of multiple Git statuses.
 ![summary](img/all.png)
 
 
+## Depends
+
+- zsh
+- git
+- [oh-my-zsh](https://ohmyz.sh/#install)
+- [powerline-fonts](https://github.com/powerline/fonts)
+
+## Install
+
+1. download the theme
+
+    ```shell
+    cd $ZSH_CUSTOM/themes
+    wget https://raw.githubusercontent.com/seamile/lambda-zen/master/lambda-zen.zsh-theme
+    ```
+
+2. edit `~/.zshrc`, and set `ZSH_THEME="lambda-zen"`
+
+
 ## Preview
 
 #### Shell error status
