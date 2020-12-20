@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 local LAMBDA="%(?,%{$fg_bold[blue]%}λ,%{$fg_bold[red]%}✘)"
-local END="%(?,%{$fg_bold[blue]%}❯ ,%{$fg_bold[red]%}❯ )"
+local END="%(?,%{$fg_bold[blue]%}❯,%{$fg_bold[red]%}❯)"
 
 # set username's color
 if [[ "$USER" == "root" ]]; then
@@ -55,6 +55,12 @@ ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg_bold[yellow]%}? "
 ZSH_THEME_GIT_PROMPT_SHA_BEFORE=" %{$fg_bold[white]%}[%{$fg_bold[blue]%}"
 ZSH_THEME_GIT_PROMPT_SHA_AFTER="%{$fg_bold[white]%}]"
 
+function system_info() {
+    [[ ! -w "$PWD" ]] && echo -n "%{$fg_no_bold[yellow]%} "
+    [[ $(jobs -l | wc -l) -gt 0 ]] && echo -n "%{$fg_bold[cyan]%}⚙ "
+    echo -n "%{$reset_color%}"
+}
+
 function git_prompt_info() {
     local ref
     if [[ "$(command git config --get oh-my-zsh.hide-status 2>/dev/null)" != "1" ]]; then
@@ -90,10 +96,11 @@ function get_right_prompt() {
     fi
 }
 
-PROMPT=$LAMBDA'\
- %{$fg_bold[$USERCOLOR]%}%n\
- %{$fg_no_bold[blue]%}[%3~]\
- $(check_git_prompt_info)\
-%{$reset_color%}'
+PROMPT=$LAMBDA' \
+%{$fg_bold[$USERCOLOR]%}%n \
+%{$fg_no_bold[blue]%}[%3~] \
+$(system_info)\
+$(check_git_prompt_info)\
+%{$reset_color%} '
 
 RPROMPT='$(get_right_prompt)'
