@@ -1,38 +1,5 @@
 #!/usr/bin/env zsh
 
-local LAMBDA="%(?,%{$fg_bold[blue]%}λ,%{$fg_bold[red]%}✘)"
-local END="%(?,%{$fg_bold[blue]%}❯,%{$fg_bold[red]%}E%? ❯)"
-
-# set username's color
-if [[ "$USER" == "root" ]]; then
-    local USERCOLOR="red"
-else
-    local USERCOLOR="yellow"
-fi
-
-
-function is_clean() {
-    local STATUS=''
-    local -a FLAGS
-    FLAGS=('--porcelain')
-
-    if [[ $POST_1_7_2_GIT -gt 0 ]]; then
-        FLAGS+='--ignore-submodules=dirty'
-    fi
-
-    if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
-        FLAGS+='--untracked-files=no'
-    fi
-
-    STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
-
-    if [[ -n $STATUS ]]; then
-        return 1
-    else
-        return 0
-    fi
-}
-
 # Format for git_prompt_info()
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[yellow]%}"
@@ -61,6 +28,28 @@ function system_info() {
     echo -n "%{$reset_color%}"
 }
 
+function is_clean() {
+    local STATUS=''
+    local -a FLAGS
+    FLAGS=('--porcelain')
+
+    if [[ $POST_1_7_2_GIT -gt 0 ]]; then
+        FLAGS+='--ignore-submodules=dirty'
+    fi
+
+    if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
+        FLAGS+='--untracked-files=no'
+    fi
+
+    STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
+
+    if [[ -n $STATUS ]]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
 function git_prompt_info() {
     local ref
     if [[ "$(command git config --get oh-my-zsh.hide-status 2>/dev/null)" != "1" ]]; then
@@ -81,23 +70,41 @@ function git_prompt_info() {
 # return anything in this case. So wrap it in another function and check
 # for an empty string.
 function check_git_prompt_info() {
-    if which git > /dev/null && git rev-parse --git-dir > /dev/null 2>&1; then
-        echo -e "$(git_prompt_info) $(git_prompt_status)\n$END"
+    _end="%(?,%{$fg_bold[blue]%}❱,%{$fg_bold[red]%}E%? ❱)"
+    if type git &> /dev/null && git rev-parse --git-dir &> /dev/null; then
+        echo -n "$(git_prompt_info) $(git_prompt_status)\n$_end"
     else
-        echo "$END"
+        echo -n "$_end"
     fi
 }
 
 function get_right_prompt() {
-    if which git > /dev/null && git rev-parse --git-dir > /dev/null 2>&1; then
+    if type git &> /dev/null && git rev-parse --git-dir &> /dev/null; then
         echo -n "$(git_prompt_short_sha)%{$reset_color%}"
     else
         echo -n "%{$reset_color%}"
     fi
 }
 
-PROMPT=$LAMBDA' \
-%{$fg_bold[$USERCOLOR]%}%n \
+local MU="%(?,%{$fg_bold[blue]%}μ,%{$fg_bold[red]%}✘)"
+
+# set username's color
+if [[ "$USER" == "root" ]]; then
+    local _USER="%{$fg_bold[red]%}%n"
+else
+    local _USER="%{$fg_bold[yellow]%}%n"
+fi
+
+# join the PROMPT
+if [ -n "$SSH_CLIENT"  ]; then
+    # show user and host on remote-host
+    local _PREFIX="$MU $_USER%{$fg_no_bold[blue]%}@%{$fg_bold[blue]%}%m"  # μ user@host
+else
+    # show user only on local-host
+    local _PREFIX="$MU $_USER"  # μ user
+fi
+
+PROMPT=$_PREFIX' \
 %{$fg_no_bold[blue]%}[%3~] \
 $(system_info)\
 $(check_git_prompt_info)\

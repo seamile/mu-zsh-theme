@@ -1,4 +1,4 @@
-# Lambda Zen Theme
+# Mu Theme
 
 This is an [oh-my-zsh](https://ohmyz.sh/) theme. And inspired by [lambda mod theme](https://github.com/halfo/lambda-mod-zsh-theme).
 
@@ -19,15 +19,19 @@ This theme improves the display of multiple Git statuses.
 
 ## Install
 
-1. download the theme
+1. Download the theme
 
     ```shell
-    cd $ZSH_CUSTOM/themes
-    wget https://raw.githubusercontent.com/seamile/lambda-zen/master/lambda-zen.zsh-theme
+    wget https://raw.githubusercontent.com/seamile/mu/master/mu.zsh-theme -P $ZSH_CUSTOM/themes
     ```
 
-2. edit `~/.zshrc`, and set `ZSH_THEME="lambda-zen"`
+2. Set the theme
 
+    use the `omz` command: `omz theme set mu`
+
+    or
+
+    Open `~/.zshrc` with an editor and manually modify the value of `ZSH_THEME` to `ZSH_THEME="mu"`
 
 ## Preview
 
