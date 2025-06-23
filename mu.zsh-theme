@@ -7,13 +7,13 @@ ZSH_THEME_GIT_PROMPT_PREFIX=" ["
 ZSH_THEME_GIT_PROMPT_SUFFIX="]%{$reset_color%}"
 
 # Format for git_prompt_status()
-ZSH_THEME_GIT_PROMPT_ADDED="%{$fg_bold[green]%}✚  "
+ZSH_THEME_GIT_PROMPT_ADDED="%{$fg_bold[green]%}🞥  "
 ZSH_THEME_GIT_PROMPT_AHEAD="%{$fg_bold[green]%}⤒  "
 ZSH_THEME_GIT_PROMPT_BEHIND="%{$fg_bold[green]%}⤓  "
-ZSH_THEME_GIT_PROMPT_DELETED="%{$fg_bold[red]%}✖  "
+ZSH_THEME_GIT_PROMPT_DELETED="%{$fg_bold[red]%}✘  "
 ZSH_THEME_GIT_PROMPT_DIVERGED="%{$fg_bold[yellow]%}ᚶ  "
-ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg_bold[red]%}●  "
-ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg_bold[magenta]%}⤳  "
+ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg_bold[red]%}⚫︎ "
+ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg_bold[magenta]%}↺  "
 ZSH_THEME_GIT_PROMPT_STASHED="%{$fg_bold[cyan]%}☑  "
 ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg_bold[red]%}⤭  "
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg_bold[yellow]%}? "
@@ -86,7 +86,12 @@ function get_right_prompt() {
     fi
 }
 
-local MU="%(?,%{$fg_bold[blue]%}μ,%{$fg_bold[red]%}✘)"
+local chars=("⛵️" "🐶" "🦊" "🐹" "🐯" "🦁" "🐧" "🐣" "🐝" "🦄" "🐛" "🐌" "🐞"
+             "🐢" "🐍" "🐙" "🐡" "🐠" "🐳" "🍀" "🌹" "🍄" "🐚" "🪐" "🔥" "🌈"
+             "✨" "⚡️" "⛄️" "🍎" "🍉" "🍓" "🍑" "🥝" "🍖" "🍭" "🍯" "🍺" "🍌"
+             "🍐" "⚽️" "🏀" "🎾" "🏓" "🥁" "🎯" "🎲" "🚀" "🦢" "🧨" "💰" "🐱")
+local selected="${chars[RANDOM % ${#chars[@]} + 1]}"
+local SYMBOL="%(?,%{$fg_bold[blue]%}${selected},%{$fg_bold[red]%}✘)"
 
 # set username's color
 if [[ "$USER" == "root" ]]; then
@@ -98,13 +103,13 @@ fi
 # join the PROMPT
 if [ -n "$SSH_CLIENT"  ]; then
     # show user and host on remote-host
-    local _PREFIX="$MU $_USER%{$fg_no_bold[blue]%}@%{$fg_bold[blue]%}%m"  # μ user@host
+    local PREFIX="$SYMBOL $_USER%{$fg_no_bold[blue]%}@%{$fg_bold[blue]%}%m"  # μ user@host
 else
     # show user only on local-host
-    local _PREFIX="$MU $_USER"  # μ user
+    local PREFIX="$SYMBOL $_USER"  # μ user
 fi
 
-PROMPT=$_PREFIX' \
+PROMPT=$PREFIX' \
 %{$fg_no_bold[blue]%}[%3~] \
 $(system_info)\
 $(check_git_prompt_info)\
