@@ -7,7 +7,7 @@ ZSH_THEME_GIT_PROMPT_PREFIX=" ["
 ZSH_THEME_GIT_PROMPT_SUFFIX="]%{$reset_color%}"
 
 # Format for git_prompt_status()
-ZSH_THEME_GIT_PROMPT_ADDED="%{$fg_bold[green]%}🞥  "
+ZSH_THEME_GIT_PROMPT_ADDED="%{$fg_bold[green]%}✚  "
 ZSH_THEME_GIT_PROMPT_AHEAD="%{$fg_bold[green]%}⤒  "
 ZSH_THEME_GIT_PROMPT_BEHIND="%{$fg_bold[green]%}⤓  "
 ZSH_THEME_GIT_PROMPT_DELETED="%{$fg_bold[red]%}✘  "
